@@ -4,19 +4,12 @@ export default defineConfig({
   testDir: "./tests",
   timeout: 30000,
   use: {
-    baseURL: "http://localhost:5173",
+    baseURL: "http://localhost:3000",
     headless: true,
   },
-  webServer: [
-    {
-      command: "bun run server/index.ts",
-      port: 3001,
-      reuseExistingServer: true,
-    },
-    {
-      command: "bun run dev",
-      port: 5173,
-      reuseExistingServer: true,
-    },
-  ],
+  webServer: {
+    command: "bun run dev",
+    port: 3000,
+    reuseExistingServer: true,
+  },
 })

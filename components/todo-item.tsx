@@ -1,6 +1,13 @@
+"use client"
+
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
-import type { Todo } from "@/lib/store"
+
+export interface Todo {
+  id: string
+  text: string
+  completed: boolean
+}
 
 interface TodoItemProps {
   todo: Todo
