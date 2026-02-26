@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useState, useCallback } from "react"
 import {
   Card,
@@ -6,20 +8,14 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { AddTodo } from "@/components/add-todo"
-import { TodoItem } from "@/components/todo-item"
-import {
-  type Todo,
-  getTodos,
-  addTodo,
-  toggleTodo,
-  deleteTodo,
-} from "@/lib/store"
+import { TodoItem, type Todo } from "@/components/todo-item"
 
 export function TodoList() {
   const [todos, setTodos] = useState<Todo[]>([])
 
   const refresh = useCallback(async () => {
-    setTodos(await getTodos())
+    const res = await fetch("/api/todos")
+    if (res.ok) setTodos(await res.json())
   }, [])
 
   useEffect(() => {
@@ -27,17 +23,25 @@ export function TodoList() {
   }, [refresh])
 
   const handleAdd = async (text: string) => {
-    await addTodo(text)
+    await fetch("/api/todos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text }),
+    })
     await refresh()
   }
 
   const handleToggle = async (id: string, completed: boolean) => {
-    await toggleTodo(id, completed)
+    await fetch(`/api/todos/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ completed }),
+    })
     await refresh()
   }
 
   const handleDelete = async (id: string) => {
-    await deleteTodo(id)
+    await fetch(`/api/todos/${id}`, { method: "DELETE" })
     await refresh()
   }
 
